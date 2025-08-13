@@ -1,0 +1,48 @@
+        /*
+         * Пользовательская тема в стиле Material 3
+         * Мы определяем цветовую палитру с помощью CSS-переменных для легкой настройки.
+         * Эти цвета имитируют динамическую цветовую систему Material You.
+        */
+        :root {
+            --md-sys-color-primary: #6750A4;
+            --md-sys-color-on-primary: #FFFFFF;
+            --md-sys-color-primary-container: #EADDFF;
+            --md-sys-color-on-primary-container: #21005D;
+            --md-sys-color-secondary-container: #E8DEF8;
+            --md-sys-color-on-secondary-container: #1D192B;
+            --md-sys-color-surface: #FFFBFE;
+            --md-sys-color-surface-variant: #E7E0EC;
+            --md-sys-color-on-surface: #1C1B1F;
+            --md-sys-color-on-surface-variant: #49454F;
+            --md-sys-color-outline: #79747E;
+            --md-sys-color-background: #FFFBFE;
+            --md-sys-color-on-background: #1C1B1F;
+            --md-sys-color-scrim: #000000;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--md-sys-color-background);
+            color: var(--md-sys-color-on-background);
+        }
+        
+        /* Стили для плавного перехода между страницами */
+        .page {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+@font-face {
+  font-family: 'GSans';
+  src: url('/web/fonts/gsans.woff2') format('woff2'),
+       url('/web/fonts/gsans.woff') format('woff'); /* Резервный формат */
+  font-weight: 400;
+}
+
+body {
+    font-family: Gsans;
+}

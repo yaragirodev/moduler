@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Мои Magisk Модули</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <link href="styles.css" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=gamepad" rel="stylesheet">
+</head>
+<body class="antialiased">
+
+    <!-- Основной контейнер приложения -->
+    <div id="app" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- Верхняя панель (App Bar) -->
+        <header class="flex items-center justify-between mb-8">
+            <h1 id="header-title" class="text-2xl font-bold" style="color: var(--md-sys-color-on-surface);">Мои Magisk Модули</h1>
+            <!-- Кнопка "Назад" будет показана здесь -->
+            <div id="back-button-container"></div>
+        </header>
+
+        <!-- Контент (список модулей или страница модуля) -->
+        <main id="content-container">
+            <!-- Содержимое будет сгенерировано с помощью JavaScript -->
+        </main>
+        
+        <!-- Нижний колонтитул -->
+        <footer class="text-center mt-12 text-sm" style="color: var(--md-sys-color-on-surface-variant);">
+            <p>&copy; 2025 yaragirodev/ygdev. Все права защищены.</p>
+        </footer>
+    </div>
+
+    <script>
+        // --- БАЗА ДАННЫХ МОДУЛЕЙ ---
+        const modules = [
+            {
+                id: '1cx',
+                name: '1ControllerX',
+                version: 'v1.5.5',
+                author: 'yaragirodev',
+                icon: 'fa-solid fa-gamepad',
+                shortDescription: 'Форк модуля, цель которого — стать универсальным модулем для контроллеров.',
+                longDescription: 'Форк модуля, цель которого — стать универсальным модулем для контроллеров. Он добавляет .kl файлы для исправления привязок клавиш на многих игровых контроллерах.',
+                changelog: [
+                    'Добавлена возможность установки модуля на Magisk 24+',
+                    'Исправлена задержка у DualShock 4, при его подключении по Bluetooth',
+                ],
+                downloadUrl: '/web/storage/1CX-1.5.5.zip',
+                githubURL: 'https://github.com/yaragirodev/OneControllerX'
+            },
+            {
+                id: 'max-blockker',
+                name: 'MAXBlockker',
+                version: 'v1',
+                author: 'yaragirodev',
+                icon: 'fa-solid fa-message',
+                shortDescription: 'Блокировка приложения MAX.',
+                longDescription: 'Этот модуль создан для блокировки приложения MAX. Что это значит? Это значит что приложение даже не сможет запустится. Зачем это нужно? Чтобы если вам скажут установить MAX допустим в школе (сейчас это не редкость), а у вас БАЦ! он не раотает!',
+                changelog: [
+                    'У модуля пока что нет обновлений.',
+                ],
+                downloadUrl: '#',
+                githubURL: 'https://github.com/yaragirodev/MaxBlocker-magisk'
+            },
+        ];
+
+        // --- ЭЛЕМЕНТЫ DOM ---
+        const contentContainer = document.getElementById('content-container');
+        const headerTitle = document.getElementById('header-title');
+        const backButtonContainer = document.getElementById('back-button-container');
+
+        // --- ФУНКЦИИ РЕНДЕРИНГА ---
+
+        /**
+         * Рендерит список всех модулей на главной странице.
+         */
+        function renderModuleList() {
+            // Очищаем контейнер и сбрасываем заголовок/кнопку "назад"
+            contentContainer.innerHTML = '';
+            backButtonContainer.innerHTML = '';
+            headerTitle.textContent = 'moduler (by ygdev)';
+
+            const listWrapper = document.createElement('div');
+            listWrapper.className = 'page grid grid-cols-1 md:grid-cols-2 gap-6';
+
+            modules.forEach(module => {
+                const card = `
+                    <div 
+                        class="module-card cursor-pointer rounded-2xl p-6 transition-all duration-300 ease-in-out hover:shadow-lg hover:-translate-y-1" 
+                        style="background-color: var(--md-sys-color-surface-variant);"
+                        data-module-id="${module.id}"
+                    >
+                        <div class="flex items-start gap-4">
+                            <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center" style="background-color: var(--md-sys-color-secondary-container);">
+                                <i class="${module.icon} text-2xl" style="color: var(--md-sys-color-on-secondary-container);"></i>
+                            </div>
+                            <div class="flex-grow">
+                                <h2 class="text-xl font-semibold" style="color: var(--md-sys-color-on-surface-variant);">${module.name}</h2>
+                                <p class="text-sm font-medium" style="color: var(--md-sys-color-on-surface-variant);">${module.version} &bull; ${module.author}</p>
+                                <p class="mt-2 text-base" style="color: var(--md-sys-color-on-surface-variant);">${module.shortDescription}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                listWrapper.innerHTML += card;
+            });
+            
+            contentContainer.appendChild(listWrapper);
+        }
+
+        /**
+         * Рендерит страницу с детальной информацией о выбранном модуле.
+         * @param {string} moduleId - ID модуля для отображения.
+         */
+        function renderModuleDetails(moduleId) {
+            const module = modules.find(m => m.id === moduleId);
+            if (!module) {
+                renderModuleList(); // Если модуль не найден, возвращаемся к списку
+                return;
+            }
+
+            // Очищаем контейнер
+            contentContainer.innerHTML = '';
+            
+            // Обновляем заголовок и добавляем кнопку "Назад"
+            headerTitle.textContent = module.name;
+            backButtonContainer.innerHTML = `
+                <button id="back-btn" class="w-12 h-12 rounded-full flex items-center justify-center transition-colors duration-200 hover:bg-gray-200 active:bg-gray-300">
+                    <i class="fa-solid fa-arrow-left text-xl" style="color: var(--md-sys-color-on-surface-variant);"></i>
+                </button>
+            `;
+            document.getElementById('back-btn').addEventListener('click', () => navigateTo('list'));
+
+            // Генерируем HTML для страницы модуля
+            const detailView = document.createElement('div');
+            detailView.className = 'page space-y-8';
+            
+            const changelogItems = module.changelog.map(item => 
+                `<li class="flex items-start gap-3">
+                    <i class="fa-solid fa-check-circle mt-1" style="color: var(--md-sys-color-primary);"></i>
+                    <span>${item}</span>
+                </li>`
+            ).join('');
+
+            detailView.innerHTML = `
+                <!-- Секция описания -->
+                <div class="p-6 rounded-2xl" style="background-color: var(--md-sys-color-surface-variant);">
+                    <h2 class="text-lg font-semibold mb-2" style="color: var(--md-sys-color-on-surface-variant);">Описание</h2>
+                    <p style="color: var(--md-sys-color-on-surface-variant);">${module.longDescription}</p>
+                </div>
+
+                <!-- Секция списка изменений -->
+                <div class="p-6 rounded-2xl" style="background-color: var(--md-sys-color-surface-variant);">
+                    <h2 class="text-lg font-semibold mb-3" style="color: var(--md-sys-color-on-surface-variant);">Список изменений (Changelog)</h2>
+                    <ul class="space-y-2" style="color: var(--md-sys-color-on-surface-variant);">
+                        ${changelogItems}
+                    </ul>
+                </div>
+
+                <!-- Кнопка скачивания -->
+                <div class="flex justify-center pt-4">
+                    <a href="${module.downloadUrl}" 
+                       class="flex items-center gap-3 text-lg font-semibold px-8 py-4 rounded-full transition-all duration-300 ease-in-out shadow-md hover:shadow-lg" 
+                       style="background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary);">
+                        <i class="fa-solid fa-download"></i>
+                        <span>Скачать ${module.version}</span>
+                    </a>
+                </div>
+                
+                <!-- Кнопка GitHub -->
+                <div class="flex justify-center pt-4">
+                    <a href="${module.githubURL}" 
+                       class="flex items-center gap-3 text-lg font-semibold px-8 py-4 rounded-full transition-all duration-300 ease-in-out shadow-md hover:shadow-lg" 
+                       style="background-color: var(--md-sys-color-primary); color: var(--md-sys-color-on-primary);">
+                        <i class="fa-solid fa-code"></i>
+                        <span>Страница на GitHub</span>
+                    </a>
+                </div>
+            `;
+
+            contentContainer.appendChild(detailView);
+        }
+        
+        // --- НАВИГАЦИЯ ---
+        
+        /**
+         * Управляет переключением между страницами.
+         * @param {string} page - Страница для отображения ('list' или 'details').
+         * @param {object} [data] - Дополнительные данные, например, ID модуля.
+         */
+        function navigateTo(page, data) {
+            window.scrollTo(0, 0); // Прокручиваем вверх при смене страницы
+            if (page === 'details') {
+                renderModuleDetails(data.moduleId);
+            } else {
+                renderModuleList();
+            }
+        }
+
+        // --- ОБРАБОТЧИКИ СОБЫТИЙ ---
+
+        // Используем делегирование событий для обработки кликов по карточкам модулей
+        contentContainer.addEventListener('click', (event) => {
+            const card = event.target.closest('.module-card');
+            if (card) {
+                const moduleId = card.dataset.moduleId;
+                navigateTo('details', { moduleId });
+            }
+        });
+
+        // --- ИНИЦИАЛИЗАЦИЯ ---
+        // При загрузке страницы отображаем список модулей
+        document.addEventListener('DOMContentLoaded', () => {
+            navigateTo('list');
+        });
+
+    </script>
+</body>
+</html>
