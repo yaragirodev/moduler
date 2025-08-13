@@ -21,7 +21,6 @@
         }
 
         body {
-            font-family: 'Inter', sans-serif;
             background-color: var(--md-sys-color-background);
             color: var(--md-sys-color-on-background);
         }
@@ -38,8 +37,7 @@
 
 @font-face {
   font-family: 'sasans';
-  src: url('web/fonts/gsans.woff2') format('woff2'),
-       url('web/fonts/gsans.woff') format('woff'); /* Резервный формат */
+  src: url('web/fonts/productsans.ttf') format('ttf'),
   font-weight: 400;
 }
 
@@ -47,5 +45,6 @@ body {
     font-family: sasans;
 
 }
+
 
 
