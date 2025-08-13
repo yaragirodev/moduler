@@ -38,8 +38,8 @@
 
 @font-face {
   font-family: 'GSans';
-  src: url('/web/fonts/GSans.woff2') format('woff2'),
-       url('/web/fonts/GSans.woff') format('woff'); /* Резервный формат */
+  src: url('web/fonts/GSans.woff2') format('woff2'),
+       url('web/fonts/GSans.woff') format('woff'); /* Резервный формат */
   font-weight: 400;
 }
 
@@ -47,3 +47,4 @@ body {
     font-family: GSans;
 
 }
+
